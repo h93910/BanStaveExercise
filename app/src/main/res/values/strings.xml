@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">BanStaveExercise</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="Sys_Warning">提示</string>
+    <string name="Sys_Yes">确定</string>
+    <string name="Sys_Cancel">取消</string>
+    <string name="correct">正确:</string>
+    <string name="incorrect">错误:</string>
+    <string name="incorrect_ratio">错误率:</string>
+    <string name="speed_ratio">准确度(个/分钟):</string>
+    <string name="speed">个/分钟</string>
+    <string name="combo">连击</string>
+
+    <string name="version">2016年11月6日　v1.1 添加连击数字\n添加横屏</string>
+</resources>
