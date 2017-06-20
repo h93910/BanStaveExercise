@@ -14,5 +14,5 @@
     <string name="speed">个/分钟</string>
     <string name="combo">连击</string>
 
-    <string name="version">2016年11月6日　v1.1 添加连击数字\n添加横屏</string>
+    <string name="version">2017.06.20 v1.1.1\n添加数字切换效果\n添加日志显示\n\n2016年11月6日 v1.1\n添加连击数字\n添加横屏</string>
 </resources>

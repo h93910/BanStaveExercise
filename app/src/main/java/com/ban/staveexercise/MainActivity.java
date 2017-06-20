@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,7 +17,9 @@ import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextSwitcher;
 import android.widget.TextView;
+import android.widget.ViewSwitcher;
 
 import com.ban.staveexercise.base.ComBase;
 import com.ban.staveexercise.base.MySampleDate;
@@ -24,6 +27,8 @@ import com.ban.staveexercise.base.MySampleDate;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.ban.staveexercise.R.id.result;
 
 public class MainActivity extends MyBaseActivity {
     private int correct;
@@ -59,10 +64,10 @@ public class MainActivity extends MyBaseActivity {
     private ImageView noteImageView;// 音符
     private ImageView alnImageView;// 上线
     private ImageView blnImageView;// 下线
-    private TextView correctNumberTextView;// 正确数
-    private TextView inCorrectNumberTextView;// 错误数
-    private TextView speedTextView;// 速度
-    private TextView incorrectRatioTextView;// 错误率
+    private TextSwitcher correctNumberTextView;// 正确数
+    private TextSwitcher inCorrectNumberTextView;// 错误数
+    private TextSwitcher speedTextView;// 速度
+    private TextSwitcher incorrectRatioTextView;// 错误率
 
 
     private ArrayList<ComboViewHolder> comboList;
@@ -77,21 +82,64 @@ public class MainActivity extends MyBaseActivity {
         startIncorrectCount = incorrect;
 
         panelImageView = (ImageView) findViewById(R.id.panel);
-        resultImageView = (ImageView) findViewById(R.id.result);
+        resultImageView = (ImageView) findViewById(result);
         noteImageView = (ImageView) findViewById(R.id.n);
         alnImageView = (ImageView) findViewById(R.id.aln);
         blnImageView = (ImageView) findViewById(R.id.bln);
-        correctNumberTextView = (TextView) findViewById(R.id.correct);
-        inCorrectNumberTextView = (TextView) findViewById(R.id.incorrect);
-        speedTextView = (TextView) findViewById(R.id.speed);
-        incorrectRatioTextView = (TextView) findViewById(R.id.incorrect_ratio);
+        correctNumberTextView = (TextSwitcher) findViewById(R.id.correct);
+        inCorrectNumberTextView = (TextSwitcher) findViewById(R.id.incorrect);
+        speedTextView = (TextSwitcher) findViewById(R.id.speed);
+        incorrectRatioTextView = (TextSwitcher) findViewById(R.id.incorrect_ratio);
 
+        correctNumberTextView.setFactory(new ViewSwitcher.ViewFactory() {
+            @Override
+            public View makeView() {
+                TextView t = new TextView(MainActivity.this);
+                t.setTextColor(getResources().getColor(R.color.correct));
+                return t;
+            }
+        });
+        inCorrectNumberTextView.setFactory(new ViewSwitcher.ViewFactory() {
+            @Override
+            public View makeView() {
+                TextView t = new TextView(MainActivity.this);
+                t.setTextColor(getResources().getColor(R.color.incorrect));
+                return t;
+            }
+        });
+        speedTextView.setFactory(new ViewSwitcher.ViewFactory() {
+            @Override
+            public View makeView() {
+                TextView t = new TextView(MainActivity.this);
+                t.setTextColor(getResources().getColor(R.color.speed));
+                return t;
+            }
+        });
+        incorrectRatioTextView.setFactory(new ViewSwitcher.ViewFactory() {
+            @Override
+            public View makeView() {
+                TextView t = new TextView(MainActivity.this);
+                t.setTextColor(getResources().getColor(R.color.incorrect_ratio));
+                return t;
+            }
+        });
         comboLayout = (RelativeLayout) findViewById(R.id.combo);
         correctNumberTextView.setText(correct + "");
         inCorrectNumberTextView.setText(incorrect + "");
+        speedTextView.setText("0");
+        incorrectRatioTextView.setText("0");
 
         alnImageView.setVisibility(View.INVISIBLE);
         blnImageView.setVisibility(View.INVISIBLE);
+
+        correctNumberTextView.setInAnimation(this, R.anim.in);
+        correctNumberTextView.setOutAnimation(this, R.anim.out);
+        inCorrectNumberTextView.setInAnimation(this, R.anim.in);
+        inCorrectNumberTextView.setOutAnimation(this, R.anim.out);
+        speedTextView.setInAnimation(this, R.anim.in);
+        speedTextView.setOutAnimation(this, R.anim.out);
+        incorrectRatioTextView.setInAnimation(this, R.anim.in);
+        incorrectRatioTextView.setOutAnimation(this, R.anim.out);
     }
 
     private List<String> btnResultSet;
@@ -171,6 +219,13 @@ public class MainActivity extends MyBaseActivity {
         for (int i = 0; i < btnIDSet.size(); i++) {
             findViewById(btnIDSet.get(i)).setOnClickListener(clickListener);
         }
+
+        resultImageView.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showWarningMessage(getString(R.string.version));
+            }
+        });
     }
 
     @Override
@@ -180,6 +235,7 @@ public class MainActivity extends MyBaseActivity {
 
     /**
      * 获取连击
+     *
      * @return
      */
     private ComboViewHolder getComboView() {
@@ -201,6 +257,8 @@ public class MainActivity extends MyBaseActivity {
     }
 
     private void doAnswer(String string) {
+        int tempCorrect = correct;
+        int tempIncorrect = incorrect;
         String result = resultSet.get(random % 7);
 
         ComboViewHolder comboViewHolder = getComboView();
@@ -221,9 +279,12 @@ public class MainActivity extends MyBaseActivity {
             comboViewHolder.comboTextLayout.setVisibility(View.INVISIBLE);
         }
 
-        correctNumberTextView.setText(correct + "");
-        inCorrectNumberTextView.setText(incorrect + "");
-
+        if (correct != tempCorrect) {
+            correctNumberTextView.setText(correct + "");
+        }
+        if (incorrect != tempIncorrect) {
+            inCorrectNumberTextView.setText(incorrect + "");
+        }
         showCombo(comboViewHolder);
         doNextExercise();
         updateInfo();
@@ -234,6 +295,8 @@ public class MainActivity extends MyBaseActivity {
     private int startIncorrectCount;
     private boolean first = true;
     private DecimalFormat decimalFormat;
+    private float speed;//速度
+    private float incorrectRatio;//错误率
 
     /**
      * 更新速度、更新错误率
@@ -248,11 +311,15 @@ public class MainActivity extends MyBaseActivity {
         if (a == 0) {
             return;
         }
-        float speed = (correct - startCount) / (a / 1000f) * 60f;
-        speedTextView.setText(decimalFormat.format(speed));
+        float tempSpeed = speed;
+        speed = (correct - startCount) / (a / 1000f) * 60f;
+        if (tempSpeed != speed)
+            speedTextView.setText(decimalFormat.format(speed));
 
-        float incorrectRatio = ((float) (incorrect - startIncorrectCount)) / (correct - startCount + incorrect - startIncorrectCount) * 100;
-        incorrectRatioTextView.setText(decimalFormat.format(incorrectRatio) + "%");
+        float tempIncorrectRatio = incorrectRatio;
+        incorrectRatio = ((float) (incorrect - startIncorrectCount)) / (correct - startCount + incorrect - startIncorrectCount) * 100;
+        if (tempIncorrectRatio != incorrectRatio)
+            incorrectRatioTextView.setText(decimalFormat.format(incorrectRatio));
     }
 
 

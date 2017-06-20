@@ -70,13 +70,11 @@
                 android:layout_marginLeft="10dp"
                 android:text="@string/correct" />
 
-            <TextView
+            <TextSwitcher
                 android:id="@+id/correct"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:text="999999"
-                android:textColor="#008000" />
+                android:layout_marginLeft="20dp" />
         </LinearLayout>
 
         <LinearLayout
@@ -95,14 +93,12 @@
                 android:layout_marginLeft="10dp"
                 android:text="@string/incorrect" />
 
-            <TextView
+            <TextSwitcher
                 android:id="@+id/incorrect"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
-                android:layout_weight="2"
-                android:text="999999"
-                android:textColor="#FF00FF" />
+                android:layout_weight="2" />
         </LinearLayout>
 
         <LinearLayout
@@ -121,13 +117,11 @@
                 android:layout_height="wrap_content"
                 android:text="@string/speed_ratio" />
 
-            <TextView
+            <TextSwitcher
                 android:id="@+id/speed"
-                android:layout_marginLeft="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="0"
-                android:textColor="#33EEFF" />
+                android:layout_marginLeft="10dp" />
 
         </LinearLayout>
 
@@ -147,12 +141,16 @@
                 android:layout_height="wrap_content"
                 android:text="@string/incorrect_ratio" />
 
-            <TextView
+            <TextSwitcher
                 android:id="@+id/incorrect_ratio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:text="0%"
+                android:layout_marginLeft="10dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="%"
                 android:textColor="#FF0000" />
 
         </LinearLayout>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="correct">#008000</color>
+    <color name="incorrect">#FF00FF</color>
+    <color name="speed">#33EEFF</color>
+    <color name="incorrect_ratio">#FF0000</color>
+</resources>
